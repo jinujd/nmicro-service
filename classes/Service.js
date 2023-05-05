@@ -6,7 +6,7 @@ export class Service {
     server
     serviceFn
     options = new ServiceOptions()
-    constructor(name, serviceFn = {}, port,options = new ServiceOptions() ) { 
+    constructor(name, serviceFn = () => {}, port,options = new ServiceOptions() ) { 
         this.options = !(options instanceof ServiceOptions)? new ServiceOptions(options): options 
         this.name = name
         this.port = port 
@@ -27,7 +27,7 @@ export class Service {
         if(this.options.stayAwake) 
             this.listenForUserInput()
         
-        return this.serviceFn
+        return this.serviceFn()
     }
     async start() {
         await this.onBeforeStart()
