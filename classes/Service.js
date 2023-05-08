@@ -4,13 +4,13 @@ export class Service {
     name
     port
     server
-    serviceFn
+    serviceBody
     options = new ServiceOptions()
-    constructor(name, serviceFn = () => {}, port,options = new ServiceOptions() ) { 
+    constructor(name, serviceBody = () => {}, port,options = new ServiceOptions() ) { 
         this.options = !(options instanceof ServiceOptions)? new ServiceOptions(options): options 
         this.name = name
         this.port = port 
-        this.serviceFn = serviceFn 
+        this.serviceBody = serviceBody 
     }
     async onBeforeStart() { 
         await this.options.onBeforeStart(this.name, this.options)
@@ -27,7 +27,7 @@ export class Service {
         if(this.options.stayAwake) 
             this.listenForUserInput()
         
-        return this.serviceFn()
+        return typeof this.serviceBody == `function`?this.serviceBody(): this.serviceBody
     }
     async start() {
         await this.onBeforeStart()
