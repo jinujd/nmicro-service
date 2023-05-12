@@ -5,6 +5,7 @@ export class Service {
     port
     server
     serviceBody
+    serviceInstance
     options = new ServiceOptions()
     constructor(name, serviceBody = () => {}, port,options = new ServiceOptions() ) { 
         this.options = !(options instanceof ServiceOptions)? new ServiceOptions(options): options 
@@ -31,8 +32,11 @@ export class Service {
     }
     async start() {
         await this.onBeforeStart()
-        const result = await this.startService()
+        this.serviceInstance = await this.startService()
         await this.onAfterStart()
-        return result
+        return this.serviceInstance
+    }
+    getInstance() {
+        return this.serviceInstance
     }
 }
